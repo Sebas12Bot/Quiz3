@@ -43,29 +43,39 @@ public class Veterinaria {
     }
 
     public void operarATodos() {
+        // Obtiene la lista de mascotas aptas para operar
         List<MascotaApta> mascotasAptasAOperar = getPacientesAOperar();
+        // Itera las mascotas aptas
         for (MascotaApta mascota : mascotasAptasAOperar) {
             try {
+                // Intenta realizar la operacion en cada mascota
                 operar(mascota.getNombre());
             } catch (MascotaOperadaException | MascotaNoOperableException e) {
+                // Maneja las excepcion
                 e.printStackTrace();
             }
         }
     }
 
     public void operar(String nombre) throws MascotaOperadaException, MascotaNoOperableException {
+        // Itera la lista de las mascotas
         for (Mascota mascota : pacientes) {
+            // verifica el nombre de la mascota con el nombre que se espera
             if (mascota.getNombre().equals(nombre)) {
+                // Si la mascota no cumple las condiciones del if
                 if (!mascota.estaEsterilizado() && mascota instanceof Operable) {
                     ((Operable) mascota).operar();
-                    return;
+                    return; // salida del metodo despues de la operacion
                 } else {
+                    // excepcion mascota no operable
                     throw new MascotaNoOperableException();
                 }
-                } else {
-                    throw new MascotaOperadaException();
-                }
+            } else {
+                // excepcion mascota operada
+                throw new MascotaOperadaException();
             }
+        }
+        // Manda una excepcion si no encuentra la mascota
         throw new MascotaNoOperableException();
     }
 
